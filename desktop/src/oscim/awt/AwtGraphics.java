@@ -32,6 +32,24 @@ import java.util.Locale;
 
 public class AwtGraphics extends CanvasAdapter {
 
+    static final BufferedImage image;
+    static final Graphics2D canvas;
+
+    static {
+        image = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+        canvas = image.createGraphics();
+
+        canvas.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        canvas.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        canvas.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+        canvas.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        canvas.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
+    }
+
+    private AwtGraphics() {
+        // do nothing
+    }
+
     public static void init() {
         CanvasAdapter.init(new AwtGraphics());
 
@@ -46,40 +64,6 @@ public class AwtGraphics extends CanvasAdapter {
 
     public static BufferedImage getBitmap(Bitmap bitmap) {
         return ((AwtBitmap) bitmap).bitmap;
-    }
-
-    private AwtGraphics() {
-        // do nothing
-    }
-
-    @Override
-    public Paint newPaintImpl() {
-        return new AwtPaint();
-    }
-
-    @Override
-    public Bitmap newBitmapImpl(int width, int height, int format) {
-        return new AwtBitmap(width, height, format);
-    }
-
-    @Override
-    public Canvas newCanvasImpl() {
-        return new AwtCanvas();
-    }
-
-    static final BufferedImage image;
-
-    static final Graphics2D canvas;
-
-    static {
-        image = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
-        canvas = image.createGraphics();
-
-        canvas.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        canvas.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        canvas.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-        canvas.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-        canvas.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
     }
 
     static synchronized FontMetrics getFontMetrics(Font font) {
@@ -101,6 +85,21 @@ public class AwtGraphics extends CanvasAdapter {
     }
 
     @Override
+    public Paint newPaintImpl() {
+        return new AwtPaint();
+    }
+
+    @Override
+    public Bitmap newBitmapImpl(int width, int height, int format) {
+        return new AwtBitmap(width, height, format);
+    }
+
+    @Override
+    public Canvas newCanvasImpl() {
+        return new AwtCanvas();
+    }
+
+    @Override
     public Bitmap decodeBitmapImpl(InputStream inputStream) {
         try {
             return new AwtBitmap(inputStream);
@@ -108,6 +107,11 @@ public class AwtGraphics extends CanvasAdapter {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    protected Bitmap decodeBitmapImpl(InputStream inputStream, int width, int height, int percent) throws IOException {
+        return null;
     }
 
     @Override

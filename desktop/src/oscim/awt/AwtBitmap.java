@@ -37,12 +37,17 @@ import java.nio.IntBuffer;
 
 public class AwtBitmap implements Bitmap {
     private static final Logger log = LoggerFactory.getLogger(AwtBitmap.class);
-
+    private final static IntBuffer tmpBuffer = BufferUtils
+            .newIntBuffer(TextureBucket.TEXTURE_HEIGHT
+                    * TextureBucket.TEXTURE_WIDTH);
+    private final static int[] tmpPixel = new int[TextureBucket.TEXTURE_HEIGHT
+            * TextureBucket.TEXTURE_WIDTH];
+    private final static boolean WRITE_TEX = false;
     BufferedImage bitmap;
     int width;
     int height;
-
     boolean internal;
+    private int dbgCnt;
 
     public AwtBitmap(int width, int height, int format) {
         bitmap = new BufferedImage(width, height, format != 0 ? format : BufferedImage.TYPE_INT_ARGB);
@@ -91,15 +96,6 @@ public class AwtBitmap implements Bitmap {
     @Override
     public void eraseColor(int transparent) {
     }
-
-    private final static IntBuffer tmpBuffer = BufferUtils
-            .newIntBuffer(TextureBucket.TEXTURE_HEIGHT
-                    * TextureBucket.TEXTURE_WIDTH);
-    private final static int[] tmpPixel = new int[TextureBucket.TEXTURE_HEIGHT
-            * TextureBucket.TEXTURE_WIDTH];
-
-    private final static boolean WRITE_TEX = false;
-    private int dbgCnt;
 
     @Override
     public void uploadToTexture(boolean replace) {
@@ -170,5 +166,10 @@ public class AwtBitmap implements Bitmap {
             IOUtils.closeQuietly(outputStream);
         }
         return null;
+    }
+
+    @Override
+    public void scaleTo(int width, int height) {
+
     }
 }

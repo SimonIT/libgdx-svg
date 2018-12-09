@@ -37,6 +37,10 @@ public class IosSvgBitmap extends IosBitmap {
      */
     public static float DEFAULT_SIZE = 400f;
 
+    public IosSvgBitmap(InputStream inputStream, int width, int height, int percent) throws IOException {
+        super(getResourceBitmapImpl(inputStream, width, height, percent));
+    }
+
     private static String getStringFromInputStream(InputStream is) {
         StringBuilder sb = new StringBuilder();
         BufferedReader br = null;
@@ -90,9 +94,5 @@ public class IosSvgBitmap extends IosBitmap {
 
     private static UIImage getResourceBitmapImpl(InputStream inputStream, int width, int height, int percent) {
         return getResourceBitmap(inputStream, CanvasAdapter.dpi / CanvasAdapter.DEFAULT_DPI, DEFAULT_SIZE, width, height, percent);
-    }
-
-    public IosSvgBitmap(InputStream inputStream, int width, int height, int percent) throws IOException {
-        super(getResourceBitmapImpl(inputStream, width, height, percent));
     }
 }

@@ -29,7 +29,6 @@ import apple.coretext.opaque.CTLineRef;
 import apple.uikit.UIColor;
 import apple.uikit.UIFont;
 import apple.uikit.c.UIKit;
-import org.oscim.backend.canvas.Color;
 import org.oscim.backend.canvas.Paint;
 
 import java.util.HashMap;
@@ -40,6 +39,27 @@ import static apple.coregraphics.c.CoreGraphics.*;
  * iOS specific implementation of {@link Paint}.
  */
 public class IosPaint implements Paint {
+
+    private static final String DEFAULT_FONT_NAME = UIFont.systemFontOfSizeWeight(1, UIKit.UIFontWeightSemibold()).fontDescriptor().postscriptName();
+    private static final String DEFAULT_FONT_NAME_BOLD = UIFont.systemFontOfSizeWeight(1, UIKit.UIFontWeightBold()).fontDescriptor().postscriptName();
+    private static final String DEFAULT_FONT_NAME_ITALIC = UIFont.italicSystemFontOfSize(1).fontDescriptor().postscriptName();
+    private final static HashMap<String, UIFont> fontHashMap = new HashMap<>();
+    FontProperties attribs = new FontProperties();
+    float strokeWidth;
+    private Align align;
+    private int cap = CGLineCap.Butt;
+    private int join = CGLineJoin.Miter;
+    private Style style;
+    private float textSize;
+    private FontFamily fontFamily;
+    private FontStyle fontStyle;
+    private int colorInt;
+    private int strokeColorInt;
+    private CTLineRef ctLine;
+    private boolean ctLineIsDirty = true;
+    private String lastText = "";
+    private float descent;
+    private float fontHeight;
 
     private static int getLineCap(Cap cap) {
         switch (cap) {
@@ -64,31 +84,6 @@ public class IosPaint implements Paint {
         }
         return CGLineJoin.Miter;
     }
-
-
-    private static final String DEFAULT_FONT_NAME = UIFont.systemFontOfSizeWeight(1, UIKit.UIFontWeightSemibold()).fontDescriptor().postscriptName();
-    private static final String DEFAULT_FONT_NAME_BOLD = UIFont.systemFontOfSizeWeight(1, UIKit.UIFontWeightBold()).fontDescriptor().postscriptName();
-    private static final String DEFAULT_FONT_NAME_ITALIC = UIFont.italicSystemFontOfSize(1).fontDescriptor().postscriptName();
-
-    private Align align;
-    FontProperties attribs = new FontProperties();
-    private int cap = CGLineCap.Butt;
-    private int join = CGLineJoin.Miter;
-    private Style style;
-    private float textSize;
-    private FontFamily fontFamily;
-    private FontStyle fontStyle;
-    private int colorInt;
-    private int strokeColorInt;
-    private CTLineRef ctLine;
-    private boolean ctLineIsDirty = true;
-    private String lastText = "";
-    private float descent;
-    private float fontHeight;
-    private final static HashMap<String, UIFont> fontHashMap = new HashMap<>();
-
-    float strokeWidth;
-
 
     @Override
     public int getColor() {
@@ -138,18 +133,6 @@ public class IosPaint implements Paint {
     @Override
     public void setStrokeJoin(Join join) {
         this.join = getLineJoin(join);
-    }
-
-    @Override
-    public void setStrokeWidth(float width) {
-        if (this.strokeWidth == width) return;
-        this.strokeWidth = width;
-        this.ctLineIsDirty = true;
-    }
-
-    @Override
-    public void setStyle(Style style) {
-        this.style = style;
     }
 
     @Override
@@ -346,8 +329,20 @@ public class IosPaint implements Paint {
     }
 
     @Override
+    public void setStrokeWidth(float width) {
+        if (this.strokeWidth == width) return;
+        this.strokeWidth = width;
+        this.ctLineIsDirty = true;
+    }
+
+    @Override
     public Style getStyle() {
         return style;
+    }
+
+    @Override
+    public void setStyle(Style style) {
+        this.style = style;
     }
 
     @Override

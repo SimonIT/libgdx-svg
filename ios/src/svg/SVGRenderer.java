@@ -19,17 +19,12 @@ import org.robovm.rt.bro.ptr.Ptr;
 @Library(Library.INTERNAL)
 @NativeClass("SVGRenderer")
 public class SVGRenderer extends SVGParser implements SVGContext, GHRenderable {
-    public static class SVGRendererPtr extends Ptr<SVGRenderer, SVGRendererPtr> {
-    }
-
     static {
         ObjCRuntime.bind(SVGRenderer.class);
     }/*</bind>*/
 
     public SVGRenderer() {
     }
-
-    ;
 
     protected SVGRenderer(long handle) {
         super(handle);
@@ -68,4 +63,7 @@ public class SVGRenderer extends SVGParser implements SVGContext, GHRenderable {
 
     @Method(selector = "asImageWithSize:andScale:")
     public native UIImage asImageWithSize(@ByVal CGSize maximumSize, @MachineSizedFloat double scale);
+
+    public static class SVGRendererPtr extends Ptr<SVGRenderer, SVGRendererPtr> {
+    }
 }

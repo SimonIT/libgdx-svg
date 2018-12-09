@@ -87,6 +87,11 @@ public class AndroidCanvas implements Canvas {
     }
 
     @Override
+    public void fillRectangle(float x, float y, float width, float height, int color) {
+
+    }
+
+    @Override
     public int getHeight() {
         return canvas.getHeight();
     }

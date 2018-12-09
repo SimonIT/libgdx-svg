@@ -13,17 +13,12 @@ import org.robovm.rt.bro.ptr.Ptr;
 @Library(Library.INTERNAL)
 @NativeClass("SVGParser")
 public class SVGParser extends NSObject {
-    public static class SVGParserPtr extends Ptr<SVGParser, SVGParserPtr> {
-    }
-
     static {
         ObjCRuntime.bind(SVGParser.class);
     }/*</bind>*/
 
     public SVGParser() {
     }
-
-    ;
 
     protected SVGParser(long handle) {
         super(handle);
@@ -34,7 +29,7 @@ public class SVGParser extends NSObject {
     }
 
     public SVGParser(String utf8String) {
-        super((SkipInit) null);
+        super(null);
         initObject(init(utf8String));
     }
 
@@ -45,4 +40,7 @@ public class SVGParser extends NSObject {
 
     @Property(selector = "parserError")
     public native NSError getParserError();
+
+    public static class SVGParserPtr extends Ptr<SVGParser, SVGParserPtr> {
+    }
 }

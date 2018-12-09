@@ -25,6 +25,14 @@ import org.oscim.backend.canvas.Paint;
 
 class AndroidPaint implements Paint {
 
+    final android.graphics.Paint mPaint;
+    private final Rect rect = new Rect();
+
+    AndroidPaint() {
+        mPaint = new android.graphics.Paint(
+                android.graphics.Paint.ANTI_ALIAS_FLAG);
+    }
+
     private static int getStyle(org.oscim.backend.canvas.Paint.FontStyle fontStyle) {
         switch (fontStyle) {
             case BOLD:
@@ -57,15 +65,6 @@ class AndroidPaint implements Paint {
         throw new IllegalArgumentException("unknown font family: " + fontFamily);
     }
 
-    final android.graphics.Paint mPaint;
-
-    private final Rect rect = new Rect();
-
-    AndroidPaint() {
-        mPaint = new android.graphics.Paint(
-                android.graphics.Paint.ANTI_ALIAS_FLAG);
-    }
-
     @Override
     public int getColor() {
         return mPaint.getColor();
@@ -86,16 +85,6 @@ class AndroidPaint implements Paint {
     public void setStrokeJoin(Join join) {
         android.graphics.Paint.Join androidJoin = android.graphics.Paint.Join.valueOf(join.name());
         mPaint.setStrokeJoin(androidJoin);
-    }
-
-    @Override
-    public void setStrokeWidth(float width) {
-        mPaint.setStrokeWidth(width);
-    }
-
-    @Override
-    public void setStyle(Style style) {
-        mPaint.setStyle(android.graphics.Paint.Style.valueOf(style.name()));
     }
 
     @Override
@@ -139,6 +128,11 @@ class AndroidPaint implements Paint {
     }
 
     @Override
+    public void setStrokeWidth(float width) {
+        mPaint.setStrokeWidth(width);
+    }
+
+    @Override
     public Style getStyle() {
         switch (mPaint.getStyle()) {
             case STROKE:
@@ -146,6 +140,11 @@ class AndroidPaint implements Paint {
             default:
                 return Style.FILL;
         }
+    }
+
+    @Override
+    public void setStyle(Style style) {
+        mPaint.setStyle(android.graphics.Paint.Style.valueOf(style.name()));
     }
 
     @Override

@@ -6,8 +6,8 @@ import org.robovm.objc.annotation.Property;
 
 public interface GHRenderable extends NSObjectProtocol {
     @Property(selector = "transform")
-    public CGAffineTransform getTransform();
+    CGAffineTransform getTransform();
 
     @Property(selector = "hidden")
-    public boolean isHidden();
+    boolean isHidden();
 }

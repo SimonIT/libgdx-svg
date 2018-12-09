@@ -25,7 +25,6 @@ import apple.coregraphics.struct.CGRect;
 import apple.coregraphics.struct.CGSize;
 import apple.foundation.NSData;
 import apple.uikit.UIColor;
-import apple.uikit.UIGraphicsImageRendererContext;
 import apple.uikit.UIImage;
 import apple.uikit.c.UIKit;
 import com.badlogic.gdx.Gdx;
@@ -58,11 +57,11 @@ public class IosBitmap implements Bitmap {
     CGContextRef cgBitmapContext;
     int width;
     int height;
+    UIImage image;
     private int glInternalFormat = Integer.MIN_VALUE;
     private int glFormat = Integer.MIN_VALUE;
     private int glType = Integer.MIN_VALUE;
     private Buffer directPixelBuffer;
-    UIImage image;
 
     /**
      * Constructor<br>
@@ -142,6 +141,38 @@ public class IosBitmap implements Bitmap {
         this.image = image;
     }
 
+    /**
+     * Returns a ByteArray from InputStream
+     *
+     * @param in InputStream
+     * @return
+     * @throws IOException
+     */
+    static byte[] toByteArray(InputStream in) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        byte[] buff = new byte[8192];
+        while (in.read(buff) > 0) {
+            out.write(buff);
+        }
+        out.close();
+        return out.toByteArray();
+    }
+
+    /**
+     * Returns the CGColor from given int
+     *
+     * @param color
+     * @return
+     */
+    static CGColorRef getCGColor(int color) {
+
+        return UIColor.colorWithRedGreenBlueAlpha(
+                Color.r(color) / 255.0,
+                Color.g(color) / 255.0,
+                Color.b(color) / 255.0,
+                Color.a(color) / 255.0
+        ).CGColor();
+    }
 
     @Override
     public int getWidth() {
@@ -172,7 +203,6 @@ public class IosBitmap implements Bitmap {
         return new int[0];
     }
 
-
     public void createContext() {
         if (this.cgBitmapContext == null) {
             CGSize size = new CGSize(this.width, this.height);
@@ -181,7 +211,6 @@ public class IosBitmap implements Bitmap {
 //            UIKit.UIGraphicsEndImageContext();
         }
     }
-
 
     @Override
     public void eraseColor(int color) {
@@ -230,39 +259,6 @@ public class IosBitmap implements Bitmap {
         return this.cgBitmapContext != null;
     }
 
-    /**
-     * Returns a ByteArray from InputStream
-     *
-     * @param in InputStream
-     * @return
-     * @throws IOException
-     */
-    static byte[] toByteArray(InputStream in) throws IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        byte[] buff = new byte[8192];
-        while (in.read(buff) > 0) {
-            out.write(buff);
-        }
-        out.close();
-        return out.toByteArray();
-    }
-
-    /**
-     * Returns the CGColor from given int
-     *
-     * @param color
-     * @return
-     */
-    static CGColorRef getCGColor(int color) {
-
-        return UIColor.colorWithRedGreenBlueAlpha(
-                Color.r(color) / 255.0,
-                Color.g(color) / 255.0,
-                Color.b(color) / 255.0,
-                Color.a(color) / 255.0
-        ).CGColor();
-    }
-
     @Override
     public byte[] getPngEncodedData() {
         NSData data = UIKit.UIImagePNGRepresentation(this.image);
@@ -274,5 +270,10 @@ public class IosBitmap implements Bitmap {
         byte[] array = new byte[length];
         System.arraycopy(buffer.array(), 4, array, 0, length);
         return array;
+    }
+
+    @Override
+    public void scaleTo(int width, int height) {
+
     }
 }

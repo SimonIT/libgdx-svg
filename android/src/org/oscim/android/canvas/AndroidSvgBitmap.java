@@ -32,6 +32,10 @@ public class AndroidSvgBitmap extends AndroidBitmap {
      */
     public static float DEFAULT_SIZE = 400f;
 
+    public AndroidSvgBitmap(InputStream inputStream, int width, int height, int percent) throws IOException {
+        super(getResourceBitmapImpl(inputStream, width, height, percent));
+    }
+
     public static Bitmap getResourceBitmap(InputStream inputStream, float scaleFactor, float defaultSize, int width, int height, int percent) throws IOException {
         try {
             SVG svg = SVG.getFromInputStream(inputStream);
@@ -78,9 +82,5 @@ public class AndroidSvgBitmap extends AndroidBitmap {
         synchronized (SVG.getVersion()) {
             return getResourceBitmap(inputStream, CanvasAdapter.dpi / CanvasAdapter.DEFAULT_DPI, DEFAULT_SIZE, width, height, percent);
         }
-    }
-
-    public AndroidSvgBitmap(InputStream inputStream, int width, int height, int percent) throws IOException {
-        super(getResourceBitmapImpl(inputStream, width, height, percent));
     }
 }

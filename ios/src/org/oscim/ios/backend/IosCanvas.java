@@ -28,6 +28,8 @@ import org.robovm.apple.coregraphics.CGRect;
  */
 public class IosCanvas implements Canvas {
 
+    CGBitmapContext cgBitmapContext;
+
     static void setFillColor(CGBitmapContext bctx, int color) {
         float blue = (color & 0xFF) / 255f;
         color >>= 8;
@@ -49,8 +51,6 @@ public class IosCanvas implements Canvas {
         float alpha = (color & 0xFF) / 255f;
         bctx.setRGBStrokeColor(red, green, blue, alpha);
     }
-
-    CGBitmapContext cgBitmapContext;
 
     @Override
     public void setBitmap(Bitmap bitmap) {
@@ -148,6 +148,11 @@ public class IosCanvas implements Canvas {
         this.cgBitmapContext.fillRect(rect);
         this.cgBitmapContext.setBlendMode(CGBlendMode.Normal);
         this.cgBitmapContext.fillRect(rect);
+    }
+
+    @Override
+    public void fillRectangle(float x, float y, float width, float height, int color) {
+
     }
 
     @Override

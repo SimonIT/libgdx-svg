@@ -30,6 +30,29 @@ import java.util.Map;
 
 public class AwtPaint implements Paint {
 
+    private static final Font DEFAULT_FONT;
+    private static final Map<Attribute, Object> TEXT_ATTRIBUTES = new HashMap<>();
+
+    static {
+        TEXT_ATTRIBUTES.put(TextAttribute.KERNING, TextAttribute.KERNING_ON);
+
+        DEFAULT_FONT = new Font("Arial", Font.PLAIN, 14).deriveFont(TEXT_ATTRIBUTES);
+    }
+
+    private final BufferedImage bufferedImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+    Color color = new Color(0.1f, 0.1f, 0.1f, 1);
+    FontMetrics fm;
+    Font font = DEFAULT_FONT; // new Font("Default", Font.PLAIN, 13);
+    Stroke stroke;
+    Style style = Style.FILL;
+    private Align align;
+    private int cap = getCap(Cap.BUTT);
+    private String fontName = DEFAULT_FONT.getFontName();
+    private int fontStyle = DEFAULT_FONT.getStyle();
+    private int join = getJoin(Join.MITER);
+    private float strokeWidth;
+    private float textSize = DEFAULT_FONT.getSize();
+
     private static int getCap(Cap cap) {
         switch (cap) {
             case BUTT:
@@ -87,30 +110,6 @@ public class AwtPaint implements Paint {
         throw new IllegalArgumentException("unknown cap: " + join);
     }
 
-    private static final Font DEFAULT_FONT;
-    private static final Map<Attribute, Object> TEXT_ATTRIBUTES = new HashMap<>();
-
-    static {
-        TEXT_ATTRIBUTES.put(TextAttribute.KERNING, TextAttribute.KERNING_ON);
-
-        DEFAULT_FONT = new Font("Arial", Font.PLAIN, 14).deriveFont(TEXT_ATTRIBUTES);
-    }
-
-    private Align align;
-    Color color = new Color(0.1f, 0.1f, 0.1f, 1);
-    FontMetrics fm;
-    Font font = DEFAULT_FONT; // new Font("Default", Font.PLAIN, 13);
-    Stroke stroke;
-    Style style = Style.FILL;
-    private int cap = getCap(Cap.BUTT);
-    private String fontName = DEFAULT_FONT.getFontName();
-    private int fontStyle = DEFAULT_FONT.getStyle();
-    private int join = getJoin(Join.MITER);
-    private float strokeWidth;
-    private float textSize = DEFAULT_FONT.getSize();
-
-    private final BufferedImage bufferedImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
-
     @Override
     public int getColor() {
         return color.getRGB();
@@ -137,20 +136,6 @@ public class AwtPaint implements Paint {
     }
 
     @Override
-    public void setStrokeWidth(float width) {
-        strokeWidth = width;
-        createStroke();
-
-        // int size = font.getSize();
-        // font = font.deriveFont(size + width * 4);
-    }
-
-    @Override
-    public void setStyle(Style style) {
-        this.style = style;
-    }
-
-    @Override
     public void setTextAlign(Align align) {
         // TODO never read
         this.align = align;
@@ -166,7 +151,7 @@ public class AwtPaint implements Paint {
     public void setTypeface(FontFamily fontFamily, FontStyle fontStyle) {
         this.fontName = getFontName(fontFamily);
         this.fontStyle = getFontStyle(fontStyle);
-        this.font = new Font(this.fontName, this.fontStyle, (int) this.textSize).deriveFont(this.TEXT_ATTRIBUTES);
+        this.font = new Font(this.fontName, this.fontStyle, (int) this.textSize).deriveFont(TEXT_ATTRIBUTES);
     }
 
     @Override
@@ -215,8 +200,22 @@ public class AwtPaint implements Paint {
     }
 
     @Override
+    public void setStrokeWidth(float width) {
+        strokeWidth = width;
+        createStroke();
+
+        // int size = font.getSize();
+        // font = font.deriveFont(size + width * 4);
+    }
+
+    @Override
     public Style getStyle() {
         return style;
+    }
+
+    @Override
+    public void setStyle(Style style) {
+        this.style = style;
     }
 
     @Override

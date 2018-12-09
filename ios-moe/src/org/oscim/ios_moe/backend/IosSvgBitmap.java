@@ -37,6 +37,10 @@ public class IosSvgBitmap extends IosBitmap {
      */
     public static float DEFAULT_SIZE = 400f;
 
+    public IosSvgBitmap(InputStream inputStream, int width, int height, int percent) throws IOException {
+        super(getResourceBitmapImpl(inputStream, width, height, percent));
+    }
+
     private static String getStringFromInputStream(InputStream is) {
         StringBuilder sb = new StringBuilder();
         BufferedReader br = null;
@@ -57,19 +61,19 @@ public class IosSvgBitmap extends IosBitmap {
     public static UIImage getResourceBitmap(InputStream inputStream, float scaleFactor, float defaultSize, int width, int height, int percent) {
         String svg = getStringFromInputStream(inputStream);
 
-        SVGRenderer renderer =  SVGRenderer.alloc();
+        SVGRenderer renderer = SVGRenderer.alloc();
         renderer.initWithString(svg);
         CGRect viewRect = renderer.viewRect();
 
-        float viewWidth= (float) viewRect.size().width();
-        float viewHeight= (float) viewRect.size().height();
+        float viewWidth = (float) viewRect.size().width();
+        float viewHeight = (float) viewRect.size().height();
 
-        double scale = scaleFactor / Math.sqrt((viewHeight* viewWidth) / defaultSize);
+        double scale = scaleFactor / Math.sqrt((viewHeight * viewWidth) / defaultSize);
 
         float bitmapWidth = (float) (viewWidth * scale);
-        float bitmapHeight = (float) (viewHeight* scale);
+        float bitmapHeight = (float) (viewHeight * scale);
 
-        float aspectRatio = (float) (viewWidth / viewHeight);
+        float aspectRatio = (viewWidth / viewHeight);
 
         if (width != 0 && height != 0) {
             // both width and height set, override any other setting
@@ -95,9 +99,5 @@ public class IosSvgBitmap extends IosBitmap {
 
     private static UIImage getResourceBitmapImpl(InputStream inputStream, int width, int height, int percent) {
         return getResourceBitmap(inputStream, CanvasAdapter.dpi / CanvasAdapter.DEFAULT_DPI, DEFAULT_SIZE, width, height, percent);
-    }
-
-    public IosSvgBitmap(InputStream inputStream, int width, int height, int percent) throws IOException {
-        super(getResourceBitmapImpl(inputStream, width, height, percent));
     }
 }

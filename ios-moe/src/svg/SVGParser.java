@@ -26,18 +26,16 @@ public class SVGParser extends NSObject {
         super(peer);
     }
 
+    @Generated
+    @Selector("setVersion:")
+    public static native void setVersion(@NInt long aVersion);
 
     @Generated
     @Selector("init")
     public native SVGParser init();
 
-
     @Generated
     @Selector("initWithString:")
     public native SVGParser initWithString(String utf8String);
-
-    @Generated
-    @Selector("setVersion:")
-    public static native void setVersion(@NInt long aVersion);
 
 }

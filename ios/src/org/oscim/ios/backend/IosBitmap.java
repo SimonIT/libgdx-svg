@@ -38,10 +38,9 @@ import java.nio.Buffer;
 public class IosBitmap implements Bitmap {
 
     static final Logger log = LoggerFactory.getLogger(IosBitmap.class);
-
-    CGBitmapContext cgBitmapContext;
     final int width;
     final int height;
+    CGBitmapContext cgBitmapContext;
     private int glInternalFormat = Integer.MIN_VALUE;
     private int glFormat = Integer.MIN_VALUE;
     private int glType = Integer.MIN_VALUE;
@@ -138,6 +137,37 @@ public class IosBitmap implements Bitmap {
         cgiIimage.dispose();
     }
 
+    /**
+     * Returns a ByteArray from InputStream
+     *
+     * @param in InputStream
+     * @return
+     * @throws IOException
+     */
+    static byte[] toByteArray(InputStream in) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        byte[] buff = new byte[8192];
+        while (in.read(buff) > 0) {
+            out.write(buff);
+        }
+        out.close();
+        return out.toByteArray();
+    }
+
+    /**
+     * Returns the CGColor from given int
+     *
+     * @param color
+     * @return
+     */
+    static CGColor getCGColor(int color) {
+        return UIColor.fromRGBA(
+                Color.a(color),
+                Color.g(color),
+                Color.b(color),
+                Color.r(color))
+                .getCGColor();
+    }
 
     @Override
     public int getWidth() {
@@ -211,42 +241,15 @@ public class IosBitmap implements Bitmap {
         return this.cgBitmapContext != null;
     }
 
-    /**
-     * Returns a ByteArray from InputStream
-     *
-     * @param in InputStream
-     * @return
-     * @throws IOException
-     */
-    static byte[] toByteArray(InputStream in) throws IOException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        byte[] buff = new byte[8192];
-        while (in.read(buff) > 0) {
-            out.write(buff);
-        }
-        out.close();
-        return out.toByteArray();
-    }
-
-    /**
-     * Returns the CGColor from given int
-     *
-     * @param color
-     * @return
-     */
-    static CGColor getCGColor(int color) {
-        return UIColor.fromRGBA(
-                Color.a(color),
-                Color.g(color),
-                Color.b(color),
-                Color.r(color))
-                .getCGColor();
-    }
-
     @Override
     public byte[] getPngEncodedData() {
         UIImage uiImage = new UIImage(cgBitmapContext.toImage());
         NSData data = uiImage.toPNGData();
         return data.getBytes();
+    }
+
+    @Override
+    public void scaleTo(int width, int height) {
+
     }
 }

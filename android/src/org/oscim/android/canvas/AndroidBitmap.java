@@ -42,11 +42,6 @@ public class AndroidBitmap implements org.oscim.backend.canvas.Bitmap {
         mBitmap = bitmap;
     }
 
-    @Override
-    public boolean isValid() {
-        return mBitmap != null;
-    }
-
     /**
      * @param format ignored always ARGB8888
      */
@@ -57,6 +52,11 @@ public class AndroidBitmap implements org.oscim.backend.canvas.Bitmap {
 
     public AndroidBitmap(Bitmap bitmap) {
         mBitmap = bitmap;
+    }
+
+    @Override
+    public boolean isValid() {
+        return mBitmap != null;
     }
 
     @Override
@@ -115,5 +115,10 @@ public class AndroidBitmap implements org.oscim.backend.canvas.Bitmap {
         } finally {
             IOUtils.closeQuietly(outputStream);
         }
+    }
+
+    @Override
+    public void scaleTo(int width, int height) {
+
     }
 }

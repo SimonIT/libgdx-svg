@@ -35,6 +35,10 @@ import java.io.InputStream;
 
 public final class AndroidGraphics extends CanvasAdapter {
 
+    private AndroidGraphics() {
+        // do nothing
+    }
+
     public static void init() {
         CanvasAdapter.init(new AndroidGraphics());
         CanvasAdapter.platform = Platform.ANDROID;
@@ -46,50 +50,6 @@ public final class AndroidGraphics extends CanvasAdapter {
 
     public static android.graphics.Bitmap getBitmap(Bitmap bitmap) {
         return ((AndroidBitmap) bitmap).mBitmap;
-    }
-
-    private AndroidGraphics() {
-        // do nothing
-    }
-
-    @Override
-    public Bitmap decodeBitmapImpl(InputStream inputStream) {
-        return new AndroidBitmap(inputStream);
-    }
-
-    @Override
-    public Bitmap decodeSvgBitmapImpl(InputStream inputStream, int width, int height, int percent) {
-        try {
-            return new AndroidSvgBitmap(inputStream, width, height, percent);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    @Override
-    public Bitmap loadBitmapAssetImpl(String relativePathPrefix, String src, int width, int height, int percent) {
-        try {
-            return createBitmap(relativePathPrefix, src, width, height, percent);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
-    public Paint newPaintImpl() {
-        return new AndroidPaint();
-    }
-
-    @Override
-    public Bitmap newBitmapImpl(int width, int height, int format) {
-        return new AndroidBitmap(width, height, format);
-    }
-
-    @Override
-    public Canvas newCanvasImpl() {
-        return new AndroidCanvas();
     }
 
     //-------------------------------------
@@ -133,5 +93,50 @@ public final class AndroidGraphics extends CanvasAdapter {
 
         InputStream in = res.openRawResource(resId);
         return new MarkerSymbol(new AndroidBitmap(in), place);
+    }
+
+    @Override
+    public Bitmap decodeBitmapImpl(InputStream inputStream) {
+        return new AndroidBitmap(inputStream);
+    }
+
+    @Override
+    protected Bitmap decodeBitmapImpl(InputStream inputStream, int width, int height, int percent) throws IOException {
+        return null;
+    }
+
+    @Override
+    public Bitmap decodeSvgBitmapImpl(InputStream inputStream, int width, int height, int percent) {
+        try {
+            return new AndroidSvgBitmap(inputStream, width, height, percent);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public Bitmap loadBitmapAssetImpl(String relativePathPrefix, String src, int width, int height, int percent) {
+        try {
+            return createBitmap(relativePathPrefix, src, width, height, percent);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public Paint newPaintImpl() {
+        return new AndroidPaint();
+    }
+
+    @Override
+    public Bitmap newBitmapImpl(int width, int height, int format) {
+        return new AndroidBitmap(width, height, format);
+    }
+
+    @Override
+    public Canvas newCanvasImpl() {
+        return new AndroidCanvas();
     }
 }

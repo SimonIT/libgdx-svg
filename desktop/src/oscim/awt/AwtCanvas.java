@@ -34,9 +34,9 @@ import java.awt.image.DataBufferInt;
 public class AwtCanvas implements Canvas {
 
     private static final java.awt.Color TRANSPARENT = new java.awt.Color(0, 0, 0, 0);
-
-    private BufferedImage bitmap;
+    private final AffineTransform tx = new AffineTransform();
     public Graphics2D canvas;
+    private BufferedImage bitmap;
 
     public AwtCanvas() {
     }
@@ -66,8 +66,6 @@ public class AwtCanvas implements Canvas {
         canvas.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
         canvas.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
     }
-
-    private final AffineTransform tx = new AffineTransform();
 
     @Override
     public void drawText(String text, float x, float y, Paint paint) {
@@ -184,6 +182,11 @@ public class AwtCanvas implements Canvas {
         this.canvas.setColor(awtColor);
         this.canvas.fillRect(0, 0, getWidth(), getHeight());
         this.canvas.setComposite(originalComposite);
+    }
+
+    @Override
+    public void fillRectangle(float x, float y, float width, float height, int color) {
+
     }
 
     @Override

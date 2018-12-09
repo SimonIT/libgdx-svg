@@ -31,6 +31,10 @@ public class AwtSvgBitmap extends AwtBitmap {
      */
     public static float DEFAULT_SIZE = 400f;
 
+    public AwtSvgBitmap(InputStream inputStream, int width, int height, int percent) throws IOException {
+        super(getResourceBitmapImpl(inputStream, width, height, percent));
+    }
+
     public static BufferedImage getResourceBitmap(InputStream inputStream, float scaleFactor, float defaultSize, int width, int height, int percent) throws IOException {
         try {
             URI uri = SVGCache.getSVGUniverse().loadSVG(inputStream, Integer.toString(inputStream.hashCode()));
@@ -80,9 +84,5 @@ public class AwtSvgBitmap extends AwtBitmap {
         synchronized (SVGCache.getSVGUniverse()) {
             return getResourceBitmap(inputStream, CanvasAdapter.dpi / CanvasAdapter.DEFAULT_DPI, DEFAULT_SIZE, width, height, percent);
         }
-    }
-
-    public AwtSvgBitmap(InputStream inputStream, int width, int height, int percent) throws IOException {
-        super(getResourceBitmapImpl(inputStream, width, height, percent));
     }
 }

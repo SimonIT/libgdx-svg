@@ -33,6 +33,27 @@ import java.util.HashMap;
  */
 public class IosPaint implements Paint {
 
+    private static final String DEFAULT_FONT_NAME = UIFont.getSystemFont(1, UIFontWeight.Semibold).getFontDescriptor().getPostscriptName();
+    private static final String DEFAULT_FONT_NAME_BOLD = UIFont.getSystemFont(1, UIFontWeight.Bold).getFontDescriptor().getPostscriptName();
+    private static final String DEFAULT_FONT_NAME_ITALIC = UIFont.getItalicSystemFont(1).getFontDescriptor().getPostscriptName();
+    private final static HashMap<String, UIFont> fontHashMap = new HashMap<>();
+    private final NSAttributedStringAttributes attribs = new NSAttributedStringAttributes();
+    float strokeWidth;
+    private Align align;
+    private CGLineCap cap = CGLineCap.Butt;
+    private CGLineJoin join = CGLineJoin.Miter;
+    private Style style;
+    private float textSize;
+    private FontFamily fontFamily;
+    private FontStyle fontStyle;
+    private int colorInt;
+    private int strokeColorInt;
+    private CTLine ctLine;
+    private boolean ctLineIsDirty = true;
+    private String lastText = "";
+    private float descent;
+    private float fontHeight;
+
     private static CGLineCap getLineCap(Cap cap) {
         switch (cap) {
             case BUTT:
@@ -56,29 +77,6 @@ public class IosPaint implements Paint {
         }
         return CGLineJoin.Miter;
     }
-
-    private static final String DEFAULT_FONT_NAME = UIFont.getSystemFont(1, UIFontWeight.Semibold).getFontDescriptor().getPostscriptName();
-    private static final String DEFAULT_FONT_NAME_BOLD = UIFont.getSystemFont(1, UIFontWeight.Bold).getFontDescriptor().getPostscriptName();
-    private static final String DEFAULT_FONT_NAME_ITALIC = UIFont.getItalicSystemFont(1).getFontDescriptor().getPostscriptName();
-
-    private Align align;
-    private final NSAttributedStringAttributes attribs = new NSAttributedStringAttributes();
-    private CGLineCap cap = CGLineCap.Butt;
-    private CGLineJoin join = CGLineJoin.Miter;
-    private Style style;
-    private float textSize;
-    private FontFamily fontFamily;
-    private FontStyle fontStyle;
-    private int colorInt;
-    private int strokeColorInt;
-    private CTLine ctLine;
-    private boolean ctLineIsDirty = true;
-    private String lastText = "";
-    private float descent;
-    private float fontHeight;
-    private final static HashMap<String, UIFont> fontHashMap = new HashMap<>();
-
-    float strokeWidth;
 
     @Override
     public int getColor() {
@@ -128,18 +126,6 @@ public class IosPaint implements Paint {
     @Override
     public void setStrokeJoin(Join join) {
         this.join = getLineJoin(join);
-    }
-
-    @Override
-    public void setStrokeWidth(float width) {
-        if (this.strokeWidth == width) return;
-        this.strokeWidth = width;
-        this.ctLineIsDirty = true;
-    }
-
-    @Override
-    public void setStyle(Style style) {
-        this.style = style;
     }
 
     @Override
@@ -341,8 +327,20 @@ public class IosPaint implements Paint {
     }
 
     @Override
+    public void setStrokeWidth(float width) {
+        if (this.strokeWidth == width) return;
+        this.strokeWidth = width;
+        this.ctLineIsDirty = true;
+    }
+
+    @Override
     public Style getStyle() {
         return style;
+    }
+
+    @Override
+    public void setStyle(Style style) {
+        this.style = style;
     }
 
     @Override

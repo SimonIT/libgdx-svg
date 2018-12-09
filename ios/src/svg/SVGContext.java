@@ -6,8 +6,8 @@ import org.robovm.objc.annotation.Method;
 
 public interface SVGContext {
     @Method(selector = "colorForSVGColorString:")
-    public UIColor colorForSVGColorString(String svgColorString);
+    UIColor colorForSVGColorString(String svgColorString);
 
     @Method(selector = "objectAtURL:")
-    public NSObject objectAtURL(String aLocation);
+    NSObject objectAtURL(String aLocation);
 }

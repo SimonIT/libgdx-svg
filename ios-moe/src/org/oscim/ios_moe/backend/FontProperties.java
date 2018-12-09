@@ -8,10 +8,7 @@ import apple.foundation.NSNumber;
 import apple.uikit.UIColor;
 import apple.uikit.UIFont;
 import org.moe.natj.general.Pointer;
-import org.moe.natj.general.ann.NFloat;
 import org.moe.natj.general.ptr.*;
-import org.moe.natj.general.ptr.impl.PtrFactory;
-import org.moe.natj.objc.ObjCRuntime;
 
 /**
  * Created by longri on 06.05.17.
