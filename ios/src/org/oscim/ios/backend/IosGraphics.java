@@ -16,13 +16,13 @@
  */
 package org.oscim.ios.backend;
 
+import com.badlogic.gdx.ApplicationLogger;
+import com.badlogic.gdx.Gdx;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.backend.Platform;
 import org.oscim.backend.canvas.Bitmap;
 import org.oscim.backend.canvas.Canvas;
 import org.oscim.backend.canvas.Paint;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,7 +32,7 @@ import java.io.InputStream;
  */
 public class IosGraphics extends CanvasAdapter {
 
-    private static final Logger log = LoggerFactory.getLogger(IosGraphics.class);
+    private static final ApplicationLogger log = Gdx.app.getApplicationLogger();
 
     public static void init() {
         CanvasAdapter.init(new IosGraphics());
@@ -59,7 +59,7 @@ public class IosGraphics extends CanvasAdapter {
         try {
             return new IosBitmap(inputStream);
         } catch (IOException e) {
-            log.error("decodeBitmapImpl", e);
+            log.error("decodeBitmapImpl", e.getMessage(), e);
             return null;
         }
     }
@@ -74,7 +74,7 @@ public class IosGraphics extends CanvasAdapter {
         try {
             return new IosSvgBitmap(inputStream, width, height, percent);
         } catch (IOException e) {
-            log.error("decodeSvgBitmapImpl", e);
+            log.error("decodeSvgBitmapImpl", e.getMessage(), e);
             return null;
         }
     }
@@ -84,7 +84,7 @@ public class IosGraphics extends CanvasAdapter {
         try {
             return createBitmap(relativePathPrefix, src, width, height, percent);
         } catch (IOException e) {
-            log.error("loadBitmapAssetImpl", e);
+            log.error("loadBitmapAssetImpl", e.getMessage(), e);
             return null;
         }
     }

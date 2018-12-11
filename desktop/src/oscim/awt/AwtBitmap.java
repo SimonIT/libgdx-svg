@@ -18,14 +18,13 @@
  */
 package oscim.awt;
 
+import com.badlogic.gdx.ApplicationLogger;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.BufferUtils;
 import org.oscim.backend.GL;
 import org.oscim.backend.canvas.Bitmap;
 import org.oscim.renderer.bucket.TextureBucket;
 import org.oscim.utils.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -36,7 +35,7 @@ import java.io.InputStream;
 import java.nio.IntBuffer;
 
 public class AwtBitmap implements Bitmap {
-    private static final Logger log = LoggerFactory.getLogger(AwtBitmap.class);
+    private static final ApplicationLogger log = Gdx.app.getApplicationLogger();
     private final static IntBuffer tmpBuffer = BufferUtils
             .newIntBuffer(TextureBucket.TEXTURE_HEIGHT
                     * TextureBucket.TEXTURE_WIDTH);
@@ -60,7 +59,6 @@ public class AwtBitmap implements Bitmap {
     }
 
     AwtBitmap(InputStream inputStream) throws IOException {
-
         this.bitmap = ImageIO.read(inputStream);
         this.width = this.bitmap.getWidth();
         this.height = this.bitmap.getHeight();
@@ -161,7 +159,7 @@ public class AwtBitmap implements Bitmap {
             ImageIO.write(this.bitmap, "png", outputStream);
             return outputStream.toByteArray();
         } catch (IOException e) {
-            log.error(e.getMessage(), e);
+            log.error("getPngEncodedData", e.getMessage(), e);
         } finally {
             IOUtils.closeQuietly(outputStream);
         }

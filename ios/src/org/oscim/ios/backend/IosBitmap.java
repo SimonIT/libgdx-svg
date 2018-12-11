@@ -14,6 +14,7 @@
  */
 package org.oscim.ios.backend;
 
+import com.badlogic.gdx.ApplicationLogger;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import org.oscim.backend.AssetAdapter;
@@ -24,8 +25,6 @@ import org.robovm.apple.coregraphics.*;
 import org.robovm.apple.foundation.NSData;
 import org.robovm.apple.uikit.UIColor;
 import org.robovm.apple.uikit.UIImage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -37,7 +36,7 @@ import java.nio.Buffer;
  */
 public class IosBitmap implements Bitmap {
 
-    static final Logger log = LoggerFactory.getLogger(IosBitmap.class);
+    static final ApplicationLogger log = Gdx.app.getApplicationLogger();
     final int width;
     final int height;
     CGBitmapContext cgBitmapContext;
@@ -99,7 +98,7 @@ public class IosBitmap implements Bitmap {
 
         InputStream inputStream = AssetAdapter.readFileAsStream(fileName);
         if (inputStream == null) {
-            log.error("invalid bitmap source: " + fileName);
+            log.error("IosBitmap", "invalid bitmap source: " + fileName);
             // no image source defined
             this.cgBitmapContext = null;
             this.width = 0;

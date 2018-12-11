@@ -27,6 +27,7 @@ import apple.foundation.NSData;
 import apple.uikit.UIColor;
 import apple.uikit.UIImage;
 import apple.uikit.c.UIKit;
+import com.badlogic.gdx.ApplicationLogger;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.utils.BufferUtils;
@@ -37,8 +38,6 @@ import org.oscim.backend.AssetAdapter;
 import org.oscim.backend.GL;
 import org.oscim.backend.canvas.Bitmap;
 import org.oscim.backend.canvas.Color;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -53,7 +52,7 @@ import static apple.coregraphics.c.CoreGraphics.*;
  */
 public class IosBitmap implements Bitmap {
 
-    static final Logger log = LoggerFactory.getLogger(IosBitmap.class);
+    static final ApplicationLogger log = Gdx.app.getApplicationLogger();
     CGContextRef cgBitmapContext;
     int width;
     int height;
@@ -116,7 +115,7 @@ public class IosBitmap implements Bitmap {
 
         InputStream inputStream = AssetAdapter.readFileAsStream(fileName);
         if (inputStream == null) {
-            log.error("invalid bitmap source: " + fileName);
+            log.error("IosBitmap", "invalid bitmap source: " + fileName);
             // no image source defined
             this.cgBitmapContext = null;
             this.width = 0;

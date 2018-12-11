@@ -18,10 +18,10 @@ package org.oscim.ios_moe.backend;
 import apple.coregraphics.struct.CGRect;
 import apple.coregraphics.struct.CGSize;
 import apple.uikit.UIImage;
+import com.badlogic.gdx.ApplicationLogger;
+import com.badlogic.gdx.Gdx;
 import org.oscim.backend.CanvasAdapter;
 import org.oscim.utils.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import svg.SVGRenderer;
 
 import java.io.BufferedReader;
@@ -30,7 +30,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class IosSvgBitmap extends IosBitmap {
-    private static final Logger log = LoggerFactory.getLogger(IosSvgBitmap.class);
+    private static final ApplicationLogger log = Gdx.app.getApplicationLogger();
 
     /**
      * Default size is 20x20px (400px) at 160dpi.
@@ -51,7 +51,7 @@ public class IosSvgBitmap extends IosBitmap {
                 sb.append(line);
             }
         } catch (IOException e) {
-            log.error(e.getMessage(), e);
+            log.error("IosSvgBitmap", e.getMessage(), e);
         } finally {
             IOUtils.closeQuietly(br);
         }
